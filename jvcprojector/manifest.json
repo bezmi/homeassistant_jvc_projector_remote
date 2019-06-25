@@ -1,0 +1,10 @@
+{
+  "domain": "jvcprojector",
+  "name": "jvcprojector",
+  "documentation": "https://github.com/bezmi/remote.jvcprojector",
+  "requirements": ["jvc-projector-remote == 0.0.1.post1"],
+  "dependencies": [],
+  "codeowners": [
+    "@bezmi"
+  ]
+}
