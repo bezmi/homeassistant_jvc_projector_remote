@@ -1,0 +1,14 @@
+{
+  "name": "JVC Projector",
+  "version": "0.0.1",
+  "slug": "jvcprojector",
+  "description": "Control your JVC Projector from homeassistant",
+  "arch": ["armhf", "armv7", "aarch64", "amd64", "i386"],
+  "url": "https://github.com/bezmi/hass_custom_components/tree/master/jvcprojector",
+  "startup": "before",
+  "boot": "auto",
+  "image": "bezmi/hassio-{arch}-jvcprojector",
+  "map": ["config:rw"],
+  "options": {},
+  "schema": {}
+}

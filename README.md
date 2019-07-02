@@ -19,8 +19,7 @@ I'll get around to it. If you would like a remote command to be implemented, ple
 an issue in the [jvc-projector-remote](https://github.com/bezmi/jvc_projector) repo.
 
 ### Installation
-For hassbian,
-
+#### Hassbian
 Clone this repo and copy the `jvcprojector` directory to,
 ~~~
 <config_dir>/custom_components/
@@ -33,6 +32,14 @@ Install the `jvc-projector-remote` python module. For hassbian,
 sudo -u <homeassistant> -H -s
 source /srv/homeassistant/bin/activate
 pip install jvc-projector-remote
-```
+
+#### Hass.io
+1. Add this repository to your hass.io instance.
+2. Install the "jvcprojector" addon.
+3. Start the "jvcprojector" addon.
+4. Check the logs for errors.
+5. Configure the remote component based on instructions in the `jvcprojector` directory.
+
+
 ### Documentation/Examples
 see the README in the `jvcprojector` directory.
