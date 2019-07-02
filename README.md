@@ -36,7 +36,7 @@ Install the `jvc-projector-remote` python module. For hassbian,
 sudo -u <homeassistant> -H -s
 source /srv/homeassistant/bin/activate
 pip install jvc-projector-remote
-
+```
 #### Hass.io
 1. Add this repository to your hass.io instance.
 2. Install the "jvcprojector" addon.
