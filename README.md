@@ -13,9 +13,13 @@ Requires my [jvc-projector-remote](https://github.com/bezmi/jvc_projector)
 module to work.
 
 ### Support/features
+#### Home Assistant Component
 If you'd like home assistant specific support, or would like me to
 implement/improve a feature for the homeassistant component, raise an issue and
-I'll get around to it. If you would like a remote command to be implemented, please raise
+I'll get around to it.
+
+#### Python Module Support
+If you would like a new command to be implemented, or have issues with related code, please raise
 an issue in the [jvc-projector-remote](https://github.com/bezmi/jvc_projector) repo.
 
 ### Installation
@@ -43,3 +47,6 @@ pip install jvc-projector-remote
 
 ### Documentation/Examples
 see the README in the `jvcprojector` directory.
+
+# Disclaimer
+I've used python for a long while in scientific work, but not too much for OOP. Be sure to let me know if there are improvements to be made to my code!
