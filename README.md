@@ -48,7 +48,7 @@ git clone https://github.com/bezmi/hass_custom_components
 mkdir /config/custom_components
 ~~~
 4. Copy the folder for your desired component into the `custom_components` directory,
-~~
+~~~
 cp -r ./hass_custom_components/jvcprojector /config/custom_components
 ~~~
 5. Restart Hass.io
