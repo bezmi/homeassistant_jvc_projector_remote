@@ -38,11 +38,20 @@ source /srv/homeassistant/bin/activate
 pip install jvc-projector-remote
 ```
 #### Hass.io
-1. Add this repository to your hass.io instance.
-2. Install the "jvcprojector" addon.
-3. Start the "jvcprojector" addon.
-4. Check the logs for errors.
-5. Configure the remote component based on instructions in the `jvcprojector` directory.
+1. SSH into your Hass.io instance. I recommend the community SSH addon, see its documentation for instructions.
+2. Clone this repo:
+~~~
+git clone https://github.com/bezmi/hass_custom_components
+~~~
+3. Make a `custom_components` directory if one doesn't exist
+~~~
+mkdir /config/custom_components
+~~~
+4. Copy the folder for your desired component into the `custom_components` directory,
+~~
+cp -r ./hass_custom_components/jvcprojector /config/custom_components
+~~~
+5. Restart Hass.io
 
 
 ### Documentation/Examples
