@@ -7,8 +7,6 @@
   "url": "https://github.com/bezmi/hass_custom_components/tree/master/jvcprojector",
   "startup": "before",
   "boot": "auto",
-  "image": "bezmi/hassio-{arch}-jvcprojector",
-  "map": ["config:rw"],
   "options": {},
   "schema": {}
 }
