@@ -23,7 +23,7 @@ If you would like a new command to be implemented, or have issues with related c
 an issue in the [jvc-projector-remote](https://github.com/bezmi/jvc_projector) repo.
 
 ### Installation
-#### HACS
+#### HACS (Preferred)
 For easy installation and updates, use the [Home Assistant Community Store](https://github.com/custom-components/hacs) to install this custom component. 
 HACS will download and install the custom component for you and keep track of updates.
 
@@ -60,7 +60,7 @@ mkdir /config/custom_components
 ~~~
 4. Copy the folder for your desired component into the `custom_components` directory,
 ~~~
-cp -r ./hass_custom_components/jvcprojector /config/custom_components
+cp -r ./hass_custom_components/custom_components/jvcprojector /config/custom_components
 ~~~
 5. Restart Hass.io
 
