@@ -9,4 +9,4 @@ Supported Commands:
 - Input (HDMI only)
 - Power Status (Standby, Cooling, Emergency, Lamp On, Reserved)
 
-For first time setup and configuration steps, refer to the [documentation](https://github.com/alterbridge86/hass_custom_components/blob/master/custom_components/jvcprojector/README.md).
+For first time setup and configuration steps, refer to the [documentation](https://github.com/bezmi/hass_custom_components/blob/master/custom_components/jvcprojector/README.md).
