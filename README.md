@@ -8,6 +8,7 @@ Supported commands,
 * Lens memory
 * Input (HDMI Only)
 * Power status
+* Picture Modes
 
 Requires my [jvc-projector-remote](https://github.com/bezmi/jvc_projector)
 module to work.
