@@ -1,11 +1,11 @@
+import logging
 from homeassistant.components import remote
 from homeassistant.const import DEVICE_DEFAULT_NAME
 from homeassistant import util
 import asyncio
 
 from homeassistant.const import (CONF_HOST, CONF_NAME)
-
-
+_LOGGER = logging.getLogger(__name__)
 
 def setup_platform(hass, config, add_entities, discovery_info=None):
     """Set up the remote."""
@@ -54,23 +54,26 @@ class JVCRemote(remote.RemoteDevice):
         if self._last_command_sent is not None:
             return {'last_command_sent': self._last_command_sent}
 
-    async def turn_on(self, **kwargs):
+    async def async_turn_on(self, **kwargs):
         """Turn the remote on."""
+        _LOGGER.info("powering on")
         self._jvc.power_on()
         self._state = True
         await asyncio.sleep(1)
         self.schedule_update_ha_state(True)
 
-    async def turn_off(self, **kwargs):
+    async def async_turn_off(self, **kwargs):
         """Turn the remote off."""
+        _LOGGER.info("powering off")
         self._jvc.power_off()
         self._state = False
         await asyncio.sleep(1)
         self.schedule_update_ha_state(True)
 
-    async def send_command(self, command, **kwargs):
+    async def async_send_command(self, command, **kwargs):
         """Send a command to a device."""
         for com in command:
+            _LOGGER.info(f"sending command: {com}")
             command_sent = self._jvc.command(com)
             if not command_sent:
                 self._last_command_sent = "N/A"
