@@ -28,6 +28,7 @@ class JVCRemote(remote.RemoteDevice):
         self._last_command_sent = None
         self._jvc = JVCProjector(host)
         self._state = None
+        self._power_state = 'N/A'
 
     @property
     def should_poll(self):
@@ -40,8 +41,8 @@ class JVCRemote(remote.RemoteDevice):
         """Return the name of the device if any."""
         return self._name
 
-    def update(self):
-        self._state = self._jvc.is_on()
+    async def async_update(self):
+        await self.async_update_state()
 
     @property
     def is_on(self):
@@ -51,30 +52,33 @@ class JVCRemote(remote.RemoteDevice):
     @property
     def device_state_attributes(self):
         """Return device state attributes."""
-        if self._last_command_sent is not None:
-            return {
-                'last_command_sent': self._last_command_sent,
-                'power_state': 'testing',
-            }
 
-    async def async_turn_on(self, **kwargs):
+        if self._power_state in ['lamp_on', 'reserved']:
+            self._state = True
+        else:
+            self._state = False
+
+        return {
+            'last_command_sent': self._last_command_sent if self._last_command_sent is not None else 'N/A',
+            'power_state': self._power_state,
+        }
+
+    def turn_on(self, **kwargs):
         """Turn the remote on."""
-        _LOGGER.info("powering on")
-        self._jvc.power_on()
+        self.async_send_command('power_off')
         self._state = True
-        await asyncio.sleep(1)
-        self.schedule_update_ha_state(True)
 
     async def async_turn_off(self, **kwargs):
         """Turn the remote off."""
-        _LOGGER.info("powering off")
-        self._jvc.power_off()
+        await self.async_send_command('power_off')
         self._state = False
-        await asyncio.sleep(1)
-        self.schedule_update_ha_state(True)
 
     async def async_send_command(self, command, **kwargs):
         """Send a command to a device."""
+
+        if type(command) != list:
+            command = [command]
+
         for com in command:
             _LOGGER.info(f"sending command: {com}")
             command_sent = self._jvc.command(com)
@@ -84,5 +88,5 @@ class JVCRemote(remote.RemoteDevice):
             else:
                 self._last_command_sent = com
 
-                await asyncio.sleep(1)
-                self.schedule_update_ha_state()
+    async def async_update_state(self):
+        self._power_state = self._jvc.power_state()
