@@ -52,7 +52,10 @@ class JVCRemote(remote.RemoteDevice):
     def device_state_attributes(self):
         """Return device state attributes."""
         if self._last_command_sent is not None:
-            return {'last_command_sent': self._last_command_sent}
+            return {
+                'last_command_sent': self._last_command_sent,
+                'power_state': 'testing',
+            }
 
     async def async_turn_on(self, **kwargs):
         """Turn the remote on."""
