@@ -23,7 +23,7 @@ remote:
 
 **host:** (string) (Required) your projector IP address.
 
-**host:** (string) (Optional) timeout used to update the component (strong suggestion to set this to 30 or higher)
+**scan_interval:** (string) (Optional) timeout used to update the component (strong suggestion to set this to 30 or higher)
 
 ### Service `remote.turn_off`
 | Service data attribute | Optional | Description |
