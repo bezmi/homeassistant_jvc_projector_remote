@@ -81,7 +81,12 @@ class JVCRemote(remote.RemoteDevice):
 
         for com in command:
             _LOGGER.info(f"sending command: {com}")
-            command_sent = self._jvc.command(com)
+            try:
+                command_sent = self._jvc.command(com)
+            except Exception:
+                # when an error occured during sending, command execution probably failed
+                command_sent = False
+
             if not command_sent:
                 self._last_command_sent = "N/A"
                 continue
@@ -89,4 +94,9 @@ class JVCRemote(remote.RemoteDevice):
                 self._last_command_sent = com
 
     async def async_update_state(self):
-        self._power_state = self._jvc.power_state()
+        """"Update the state with the Power Status (if available)"""
+
+        try:
+            self._power_state = self._jvc.power_state()
+        except Exception:
+            self._power_state = 'unknown'
