@@ -6,5 +6,6 @@
   "dependencies": [],
   "codeowners": [
     "@bezmi"
-  ]
+  ],
+  "version": "1.0.0"
 }
