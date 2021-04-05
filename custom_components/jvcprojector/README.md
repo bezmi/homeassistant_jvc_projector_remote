@@ -16,11 +16,14 @@ remote:
   - platform: jvcprojector
     name: Projector
     host: 192.168.1.14
+    scan_interval: 30
 ```
 ### Configuration Variables
 **name:** (string) (Required) friendly name for your projector.
 
 **host:** (string) (Required) your projector IP address.
+
+**scan_interval:** (string) (Optional) timeout used to update the component (strong suggestion to set this to 30 or higher)
 
 ### Service `remote.turn_off`
 | Service data attribute | Optional | Description |
