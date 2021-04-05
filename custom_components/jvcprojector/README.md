@@ -1,6 +1,8 @@
 # JVC Projector Remote
 The `jvcprojector` remote platform allows you to control the state of a JVC
-Projector.
+Projector. 
+
+DISCLAIMER: I rarely have time to work on these things, so if anything is broken, let me know and I'll push out a patch as quickly as possible. Alternatively, create a pull request!
 
 Known Supported Units:
 * DLA-X5900
