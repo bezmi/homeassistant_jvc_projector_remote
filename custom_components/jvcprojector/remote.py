@@ -17,7 +17,7 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
     ])
 
 
-class JVCRemote(remote.RemoteDevice):
+class JVCRemote(remote.RemoteEntity):
     """Home assistant JVC remote representation"""
 
     def __init__(self, name, host):
