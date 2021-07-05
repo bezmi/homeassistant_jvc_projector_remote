@@ -47,6 +47,7 @@ The available commands are:
 * **Lens Memory:** `memory1`, `memory2`, `memory3`, `memory4`,`memory5`
 * **Source:** `hdmi1`, `hdmi2`
 * **Picture Mode:** `pm_cinema`, `pm_hdr`, `pm_natural`, `pm_film`, `pm_THX`, `pm_user{1-6}`, `pm_hlg`
+* **Low Latency Mode:** `pm_low_latency_enable`, `pm_low_latency_disable`
 
 Currently there is no feedback for these commands, but it is something that may be implemented in future. For power on/off, use the `remote.turn_on` and `remote.turn_off` services, as these retrieve the power state.
 
