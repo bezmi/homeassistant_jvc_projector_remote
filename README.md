@@ -1,14 +1,24 @@
 # Custom Components for Home assistant
 This repo contains my custom components for home assistant.
 
+
 ## Components
 ## JVC Projector
+
+Check out the [Home Assistant Community Page](https://community.home-assistant.io/t/jvc-projector-component/123417) if you're having trouble getting this working.
+
 Supported commands,
 * On/off
 * Lens memory
 * Input (HDMI Only)
 * Power status
 * Picture Modes
+* Low Latency
+* Mask Commands
+* Lamp Setting
+* Menu Controls
+* Lens Aperture
+* Anamorphic
 
 Requires my [jvc-projector-remote](https://github.com/bezmi/jvc_projector)
 module to work.
