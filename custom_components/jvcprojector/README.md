@@ -48,6 +48,11 @@ The available commands are:
 * **Source:** `hdmi1`, `hdmi2`
 * **Picture Mode:** `pm_cinema`, `pm_hdr`, `pm_natural`, `pm_film`, `pm_THX`, `pm_user{1-6}`, `pm_hlg`
 * **Low Latency Mode:** `pm_low_latency_enable`, `pm_low_latency_disable`
+* **Mask** `mask_off`, `mask_custom{1,2,3}`
+* **Lamp** `lamp_{high,low}`
+* **Menu Controls** `menu`, `menu_{up,down,left,right,ok,back}`
+* **Lens Aperture** `aperture_off`, `aperture_auto{1,2}`
+* **Anamorphic** `anamorphic_off`, `anamorphic_{a,b,c}`
 
 Currently there is no feedback for these commands, but it is something that may be implemented in future. For power on/off, use the `remote.turn_on` and `remote.turn_off` services, as these retrieve the power state.
 
