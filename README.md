@@ -15,7 +15,16 @@ Known Supported Units:
 The IP command format hasn't changed
 for a while and it should work with most JVC D-ILA projectors.
 
-## Example Usage
+## Basic Setup and Example Usage
+Add this under `remote` in your `configuration.yaml` (NOTE: no web interface set up at the moment, there's an open issue for it):
+```yaml
+# Example configuration.yaml entry
+remote:
+  - platform: jvcprojector
+    name: Projector
+    host: 192.168.1.14
+    scan_interval: 30
+```
 You can implement changing of the projector input and lens memory based on `input_select` entities and some automation templates.
 
 Edit your `automations.yaml` (Thanks to [OtisPresley](https://community.home-assistant.io/t/jvc-projector-component/123417/32) for the updated instructions!):
@@ -76,15 +85,6 @@ pip install jvc-projector-remote
 ```
 
 ### Configuration
-Add this under `remote` in your `configuration.yaml` (NOTE: no web interface set up at the moment, there's an open issue for it):
-```yaml
-# Example configuration.yaml entry
-remote:
-  - platform: jvcprojector
-    name: Projector
-    host: 192.168.1.14
-    scan_interval: 30
-```
 
 #### Configuration Variables
 **name:** (string) (Required) friendly name for your projector.
