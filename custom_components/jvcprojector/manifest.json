@@ -1,12 +1,22 @@
 {
   "domain": "jvcprojector",
-  "name": "JVC Projector IP Control",
-  "documentation": "https://github.com/bezmi/hass_custom_components",
-  "requirements": ["jvc-projector-remote == 0.1.0"],
+  "name": "JVC Projector",
+  "config_flow": true,
+  "documentation": "https://www.home-assistant.io/integrations/jvcprojector",
+  "requirements": [
+    "jvc-projector-remote==0.1.0"
+  ],
+  "ssdp": [],
+  "zeroconf": [],
+  "homekit": {},
   "dependencies": [],
   "codeowners": [
-    "@bezmi",
-    "@alterbridge86"
+    "@bezmi"
   ],
-  "version": "1.0.1"
+  "iot_class": "local_polling",
+  "dhcp": [
+    {
+      "macaddress": "E0DADC*"
+    }
+  ]
 }

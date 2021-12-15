@@ -1,0 +1,35 @@
+{
+  "config": {
+    "abort": {
+      "already_configured": "Device is already configured"
+    },
+    "step": {
+      "user": {
+        "description": "Set up JVC Projector integration.",
+        "data": {
+          "host": "Host/IP",
+          "port": "Port",
+          "delay": "Delay (seconds between requests)",
+          "timeout": "Timeout (seconds to wait for connection)"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Cannot connect",
+      "unknown": "Unknown error"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Options for JVC Projector",
+        "data": {
+          "host": "Host/IP",
+          "port": "Port",
+          "delay": "Delay (seconds between requests)",
+          "timeout": "Timeout (seconds to wait for connection)"
+        }
+      }
+    }
+  }
+}
