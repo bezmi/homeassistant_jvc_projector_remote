@@ -5,12 +5,11 @@ import asyncio
 from collections.abc import Iterable
 from datetime import timedelta
 import logging
-from typing import Final
+from typing import Any, Final
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_DELAY, CONF_HOST, CONF_PORT, CONF_TIMEOUT, Platform
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.debounce import Debouncer
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 from jvc_projector import JVCCommandNotFoundError, JVCProjectorClient
 from jvc_projector.jvcprojector import JVCPoweredOffError
@@ -80,7 +79,7 @@ class JVCProjectorCoordinator(DataUpdateCoordinator[None]):
         self.input: str | None = None
         self.last_command_sent: str | None = None
         self.state_lock = asyncio.Lock()
-        self.attrs = {}
+        self.attrs: dict[str, Any] = {}
         self.projector = JVCProjectorClient(
             host, port, delay_seconds, connect_timeout_seconds
         )
@@ -95,6 +94,8 @@ class JVCProjectorCoordinator(DataUpdateCoordinator[None]):
     async def async_update_projector_params(
         self, new_host, new_port, new_delay_seconds, new_connect_timeout
     ) -> None:
+        """Update the projector client with new options."""
+
         async with self.state_lock:
             self.projector = JVCProjectorClient(
                 new_host,
@@ -105,8 +106,8 @@ class JVCProjectorCoordinator(DataUpdateCoordinator[None]):
 
     async def _async_update_data(self) -> None:
         async with self.state_lock:
-            self.is_on: bool = await self.projector.async_is_on()
-            self.power_state: str | None = await self.projector.async_get_power_state()
+            self.is_on = await self.projector.async_is_on()
+            self.power_state = await self.projector.async_get_power_state()
             # self.input: str | None = None
             try:
                 input_signal = await self.projector.async_get_input()

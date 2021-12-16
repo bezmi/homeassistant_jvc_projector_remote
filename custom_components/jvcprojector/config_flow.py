@@ -81,11 +81,6 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             vol.Optional(CONF_TIMEOUT, default=DEFAULT_CONNECT_TIMEOUT): int,
         }
 
-        # if self.show_advanced_options:
-        #     data_schema[vol.Optional(CONF_PORT, default=DEFAULT_PORT)] = int
-        #     data_schema[vol.Optional(CONF_DELAY, default=DEFAULT_DELAY_SECONDS)] = float
-        #     data_schema[vol.Optional(CONF_TIMEOUT, default=DEFAULT_CONNECT_TIMEOUT)] = int
-
         return self.async_show_form(
             step_id="user",
             data_schema=vol.Schema(data_schema),
@@ -107,7 +102,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
 
 
 class JVCProjectorOptionsFlowHandler(config_entries.OptionsFlow):
-    """Config flow options for JVC Projector"""
+    """Config flow options for JVC Projector."""
 
     def __init__(self, config_entry: ConfigEntry) -> None:
         """Initialize JVC Projector options flow."""
@@ -127,8 +122,6 @@ class JVCProjectorOptionsFlowHandler(config_entries.OptionsFlow):
         self, user_input: dict[str, Any] | None = None
     ) -> FlowResult:
         """Manage the options."""
-        # coordinator = self.hass.data[DOMAIN][self.config_entry.entry_id]
-        # proj = coordinator.projector
         if user_input is not None:
             return self.async_create_entry(title="", data=user_input)
 

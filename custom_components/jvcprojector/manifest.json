@@ -1,22 +1,14 @@
 {
-  "domain": "jvcprojector",
-  "name": "JVC Projector",
-  "config_flow": true,
-  "documentation": "https://www.home-assistant.io/integrations/jvcprojector",
-  "requirements": [
-    "jvc-projector-remote==0.1.0"
-  ],
-  "ssdp": [],
-  "zeroconf": [],
-  "homekit": {},
-  "dependencies": [],
-  "codeowners": [
-    "@bezmi"
-  ],
-  "iot_class": "local_polling",
-  "dhcp": [
-    {
-      "macaddress": "E0DADC*"
-    }
-  ]
+    "domain": "jvcprojector",
+    "name": "JVC Projector",
+    "config_flow": true,
+    "documentation": "https://www.home-assistant.io/integrations/jvcprojector",
+    "requirements": ["jvc-projector-remote==0.1.0"],
+    "ssdp": [],
+    "zeroconf": [],
+    "homekit": {},
+    "dependencies": [],
+    "codeowners": ["@bezmi"],
+    "iot_class": "local_polling",
+    "dhcp": [{"macaddress": "E0DADC*"}]
 }
