@@ -63,7 +63,7 @@ class JVCRemote(remote.RemoteEntity):
             'power_state': self._power_state,
         }
 
-    async def turn_on(self, **kwargs):
+    async def async_turn_on(self, **kwargs):
         """Turn the remote on."""
         await self.async_send_command('power_on')
         self._state = True
