@@ -11,9 +11,13 @@ DISCLAIMER: I rarely have time to work on these things, so if anything is broken
 Known Supported Units:
 * DLA-X5900
 * DLA-RS1000
+* DLA-RS3100
 
 The IP command format hasn't changed
 for a while and it should work with most JVC D-ILA projectors.
+
+**NOTE For JVC NZ series**
+JVC has implemented a "Network Password" with their latest projectors (NZ Series). You will need to define a Network Password on the projector and provide it in the configuration of this integration in order for it to communicate.
 
 ## Basic Setup and Example Usage
 Add this under `remote` in your `configuration.yaml` (NOTE: no web interface set up at the moment, there's an open issue for it):
@@ -23,6 +27,7 @@ remote:
   - platform: jvcprojector
     name: Projector
     host: 192.168.1.14
+    password: MyPassword
     scan_interval: 30
 ```
 You can implement changing of the projector input and lens memory based on `input_select` entities and some automation templates.

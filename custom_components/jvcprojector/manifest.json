@@ -5,8 +5,7 @@
   "requirements": ["jvc-projector-remote == 0.1.0"],
   "dependencies": [],
   "codeowners": [
-    "@bezmi",
-    "@alterbridge86"
+    "@bezmi"
   ],
   "version": "1.0.1"
 }
