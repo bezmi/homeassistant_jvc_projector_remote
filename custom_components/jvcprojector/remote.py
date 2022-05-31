@@ -4,29 +4,31 @@ from homeassistant.const import DEVICE_DEFAULT_NAME
 from homeassistant import util
 import asyncio
 
-from homeassistant.const import (CONF_HOST, CONF_NAME)
+from homeassistant.const import (CONF_HOST, CONF_NAME, CONF_PASSWORD)
 _LOGGER = logging.getLogger(__name__)
 
 def setup_platform(hass, config, add_entities, discovery_info=None):
     """Set up the remote."""
     if config.get(CONF_HOST) is not None:
-         host = config.get(CONF_HOST)
-         name = config.get(CONF_NAME)
+        host = config.get(CONF_HOST)
+        name = config.get(CONF_NAME)
+        password = config.get(CONF_PASSWORD)
     add_entities([
-        JVCRemote(name, host),
+        JVCRemote(name, host, password),
     ])
 
 
 class JVCRemote(remote.RemoteEntity):
     """Home assistant JVC remote representation"""
 
-    def __init__(self, name, host):
+    def __init__(self, name, host, password):
         """Initialize the Remote."""
         from jvc_projector import JVCProjector
         self._name = name or DEVICE_DEFAULT_NAME
         self._host = host
+        self._password = password
         self._last_command_sent = None
-        self._jvc = JVCProjector(host)
+        self._jvc = JVCProjector(host, password)
         self._state = None
         self._power_state = 'N/A'
 
@@ -50,7 +52,7 @@ class JVCRemote(remote.RemoteEntity):
         return self._state
 
     @property
-    def device_state_attributes(self):
+    def extra_state_attributes(self):
         """Return device state attributes."""
 
         if self._power_state in ['lamp_on', 'reserved']:
