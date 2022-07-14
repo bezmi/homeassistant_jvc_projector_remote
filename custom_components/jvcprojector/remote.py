@@ -31,6 +31,7 @@ class JVCRemote(remote.RemoteEntity):
         self._jvc = JVCProjector(host, password)
         self._state = None
         self._power_state = 'N/A'
+        self.state_lock = asyncio.Lock()
 
     @property
     def should_poll(self):
@@ -78,27 +79,32 @@ class JVCRemote(remote.RemoteEntity):
     async def async_send_command(self, command, **kwargs):
         """Send a command to a device."""
 
-        if type(command) != list:
-            command = [command]
+        async with self.state_lock:
+            if type(command) != list:
+                command = [command]
 
-        for com in command:
-            _LOGGER.info(f"sending command: {com}")
-            try:
-                command_sent = self._jvc.command(com)
-            except Exception:
-                # when an error occured during sending, command execution probably failed
-                command_sent = False
+            for com in command:
+                _LOGGER.info(f"sending command: {com}")
+                try:
+                    command_sent = await hass.async_add_executor_job(self._jvc.command(com))
+                except Exception:
+                    # when an error occured during sending, command execution probably failed
+                    command_sent = False
 
-            if not command_sent:
-                self._last_command_sent = "N/A"
-                continue
-            else:
-                self._last_command_sent = com
+                if not command_sent:
+                    self._last_command_sent = "N/A"
+                    continue
+                else:
+                    self._last_command_sent = com
 
     async def async_update_state(self):
         """"Update the state with the Power Status (if available)"""
 
+        # do nothing until lock is released
+        if self.state_lock.locked():
+            return
+
         try:
-            self._power_state = self._jvc.power_state()
+            self._power_state = await hass.async_add_executor_job(self._jvc.power_state())
         except Exception:
             self._power_state = 'unknown'
