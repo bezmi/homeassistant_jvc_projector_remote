@@ -14,14 +14,14 @@ def setup_platform(hass, config, add_entities, discovery_info=None):
         name = config.get(CONF_NAME)
         password = config.get(CONF_PASSWORD)
     add_entities([
-        JVCRemote(name, host, password),
+        JVCRemote(name, host, password, hass),
     ])
 
 
 class JVCRemote(remote.RemoteEntity):
     """Home assistant JVC remote representation"""
 
-    def __init__(self, name, host, password):
+    def __init__(self, name, host, password, hass):
         """Initialize the Remote."""
         from jvc_projector import JVCProjector
         self._name = name or DEVICE_DEFAULT_NAME
@@ -32,6 +32,7 @@ class JVCRemote(remote.RemoteEntity):
         self._state = None
         self._power_state = 'N/A'
         self.state_lock = asyncio.Lock()
+        self._hass = hass
 
     @property
     def should_poll(self):
@@ -86,7 +87,7 @@ class JVCRemote(remote.RemoteEntity):
             for com in command:
                 _LOGGER.info(f"sending command: {com}")
                 try:
-                    command_sent = await hass.async_add_executor_job(self._jvc.command(com))
+                    command_sent = await self._hass.async_add_executor_job(self._jvc.command(com))
                 except Exception:
                     # when an error occured during sending, command execution probably failed
                     command_sent = False
@@ -105,6 +106,6 @@ class JVCRemote(remote.RemoteEntity):
             return
 
         try:
-            self._power_state = await hass.async_add_executor_job(self._jvc.power_state())
+            self._power_state = await self._hass.async_add_executor_job(self._jvc.power_state())
         except Exception:
             self._power_state = 'unknown'
