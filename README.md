@@ -27,7 +27,24 @@ remote:
   - platform: jvcprojector
     name: Projector
     host: 192.168.1.14
+
+    # only required for NZ series and up
     password: MyPassword
+
+    # optional, default is 20554
+    port: 20554
+
+    # optional, default is 10s
+    timeout: 10
+
+    # how long to wait between commands
+    # optional, default is 600ms
+    delay: 600
+
+    # how many times to retry on connection error
+    # optional, default is 10
+    max_retries: 10
+
     scan_interval: 30
 ```
 You can implement changing of the projector input and lens memory based on `input_select` entities and some automation templates.
@@ -48,9 +65,9 @@ Edit your `automations.yaml` (Thanks to [OtisPresley](https://community.home-ass
         entity_id: remote.theater_room_projector
         command: >-
             {% if is_state('input_select.jvc_projector_input', 'HDMI 1') %}
-              hdmi1
+              input-hdmi1
             {% elif is_state('input_select.jvc_projector_input', 'HDMI 2') %}
-              hdmi2
+              input-hdmi2
             {% endif %}
 ```
 
@@ -115,15 +132,15 @@ pip install jvc-projector-remote
 | `command`              |       no |A command to send. |
 
 The available commands are:
-* **Lens Memory:** `memory1`, `memory2`, `memory3`, `memory4`,`memory5`
-* **Source:** `hdmi1`, `hdmi2`
-* **Picture Mode:** `pm_cinema`, `pm_hdr`, `pm_natural`, `pm_film`, `pm_THX`, `pm_user{1-6}`, `pm_hlg`
-* **Low Latency Mode:** `pm_low_latency_enable`, `pm_low_latency_disable`
-* **Mask** `mask_off`, `mask_custom{1,2,3}`
-* **Lamp** `lamp_{high,low}`
-* **Menu Controls** `menu`, `menu_{up,down,left,right,ok,back}`
-* **Lens Aperture** `aperture_off`, `aperture_auto{1,2}`
-* **Anamorphic** `anamorphic_off`, `anamorphic_{a,b,c}`
+* **Lens Memory:** `memory-1`, `memory-2`, `memory-3`, `memory-4`,`memory-5`
+* **Source:** `input-hdmi1`, `input-hdmi2`
+* **Picture Mode:** `picture_mode-{cinema, natural, film, THX, hlg, hdr10}`, `picture_mode-user{1-6}`
+* **Low Latency Mode:** `low_latency-on`, `low_latency-off`
+* **Mask** `mask-off`, `mask-custom{1,2,3}`
+* **Lamp** `lamp-{high,low}`
+* **Menu Controls** `menu-{menu,up,down,left,right,ok,back}`
+* **Lens Aperture** `aperture-off`, `aperture-auto{1,2}`
+* **Anamorphic** `anamorphic-off`, `anamorphic-{a,b,c}`
 
 Currently there is no feedback for these commands. For power on/off, use the `remote.turn_on` and `remote.turn_off` services, as these retrieve the power state.
 
