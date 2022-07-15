@@ -113,6 +113,7 @@ class JVCRemote(remote.RemoteEntity):
                     )
                 except JVCPoweredOffError as e:
                     # The projector is powered off
+                    command_sent = False
                     _LOGGER.error(f"Failed to send command, projector is powered off")
                 except Exception as e:
                     # when an error occured during sending, command execution probably failed
