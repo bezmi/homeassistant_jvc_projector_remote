@@ -90,22 +90,6 @@ bezmi/hass_custom_components
 
 And use type `Integration`. Once installed, proceed to follow README in the 'jvcprojector' directory.
 
-### Hassbian (Advanced)
-This is for experienced users only, I won't provide support for these installs because there are too many variables.
-Clone this repo and copy the `jvcprojector` directory to,
-~~~
-<config_dir>/custom_components/
-~~~
-My `<config_dir>` is `/home/homeassistant/.homeassistant/`
-
-Install the `jvc-projector-remote` python module. For hassbian,
-
-``` shell
-sudo -u <homeassistant> -H -s
-source /srv/homeassistant/bin/activate
-pip install jvc-projector-remote
-```
-
 ### Configuration
 
 #### Configuration Variables
