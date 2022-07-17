@@ -4,7 +4,7 @@ from homeassistant.const import DEVICE_DEFAULT_NAME
 from homeassistant import util
 import asyncio
 from typing import Final
-from jvc_projector import JVCCommunicationError as comm_error
+from jvc_projector_remote import JVCCommunicationError as comm_error
 import datetime
 
 JVC_RETRIES: Final = "max_retries"
@@ -52,7 +52,7 @@ class JVCRemote(remote.RemoteEntity):
         retries: int | None,
     ) -> None:
         """Initialize the Remote."""
-        from jvc_projector import JVCProjector
+        from jvc_projector_remote import JVCProjector
 
         self._name = name or DEVICE_DEFAULT_NAME
         self._host = host
