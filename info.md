@@ -1,5 +1,5 @@
 # JVC Projector IP Control component for Home Assistant
-WARNING: Version 2.0.0 of this custom component is a big update and contains changes that will break your config from the previous versions. Please see the [documentation](https://github.com/bezmi/homeassistant_jvc_projector_remote/blob/master/README.md).
+WARNING: Version 2.0.0 of this custom component is a big update and contains changes that will break your config from the previous versions. Please see the [documentation](https://github.com/bezmi/homeassistant_jvc_projector_remote/blob/async_fix_improved_commands/README.md).
 
 This is a custom [Home Assistant](https://home-assistant.io/) component to support IP control of JVC projectors. This should work with nearly any recent JVC projector as the IP control schema has not changed for some time. Check out the [Home Assistant community page](https://community.home-assistant.io/t/jvc-projector-component/123417) for support.
 
@@ -17,4 +17,4 @@ Supported Commands:
 - Lens Aperture (Off, Auto 1, Auto 2)
 - Anamorphic (Off, a, b, c)
 
-For first time setup and configuration steps, refer to the [documentation](https://github.com/bezmi/homeassistant_jvc_projector_remote/blob/master/README.md).
+For first time setup and configuration steps, refer to the [documentation](https://github.com/bezmi/homeassistant_jvc_projector_remote/blob/async_fix_improved_commands/README.md).
