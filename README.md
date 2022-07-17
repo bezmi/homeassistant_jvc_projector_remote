@@ -27,6 +27,7 @@ remote:
   - platform: jvcprojector
     name: Projector
     host: 192.168.1.14
+    scan_interval: 30
 
     # only required for NZ series and up
     password: MyPassword
@@ -34,18 +35,17 @@ remote:
     # optional, default is 20554
     port: 20554
 
-    # optional, default is 10s
-    timeout: 10
+    # optional, float, default is 0.5 seconds
+    # how long to wait before raising a communication error
+    timeout: 0.5
 
     # how long to wait between commands
-    # optional, default is 600ms
+    # optional, default is 600 milliseconds
     delay: 600
 
     # how many times to retry on connection error
-    # optional, default is 10
-    max_retries: 10
-
-    scan_interval: 30
+    # optional, default is 5
+    max_retries: 5
 ```
 You can implement changing of the projector input and lens memory based on `input_select` entities and some automation templates.
 
@@ -113,36 +113,75 @@ pip install jvc-projector-remote
 
 **host:** (string) (Required) your projector IP address.
 
-**scan_interval:** (string) (Optional) timeout used to update the component (strong suggestion to set this to 30 or higher)
+**scan_interval:** (string) (Optional) timeout used to update the component
 
-#### Service `remote.turn_off`
+**password:** (string) (Optional) only required for NZ series (or up) projectors
+
+**port:** (int) (Optional) which port to connect to, default is 20554
+
+**timeout:** (float) (Optional) how many seconds to wait for response from projector before a communication error is called, default is 2.0 seconds
+
+**delay:** (int) (Optional) how many milliseconds to wait between consecutive commands, default is 600 milliseconds
+
+**max_retries:** (int) (Optional) how many times to retry connection on a socket error, default is 5
+
+#### Extra State Attributes:
+**`last_commands_sent`:** a list of the commands sent when `remote.send_command` was last called on this entity
+
+**`last_commands_response`:** a list of the responses from the projector for each command in `last_commands_sent`. If the command was a successful write command (no response from projector), then the element in this list will be the string `success`. Otherwise, it will be a string representing the response from the projector.
+
+**`power_state`:** the current power state of the projector. Will be one of: `lamp_on`, `reserved`, `standby`, `cooling`, `emergency`
+
+**`signal_state`:** the current status of the input signal. Will be one of: `no_signal`, `active_signal`
+
+**`input_state`:** the current input setting of the projector. Will be one of: `hdmi1`, `hdmi2`
+
+**`lamp_state`:** the state of the lamp. Will be one of: `high`, `low`
+
+**`picture_mode`:** the current picture mode setting. Will be one of: `cinema`, `natural`, `film`, `THX`, `hlg`, `hdr10`, `user{1-6}`
+
+#### Service `remote.turn_off`:
 | Service data attribute | Optional | Description |
 | ---------------------- | -------- | ----------- |
 | `entity_id`            |       no |Entity ID to projector. |
 
-#### Service `remote.turn_on`
+#### Service `remote.turn_on`:
 | Service data attribute | Optional | Description |
 | ---------------------- | -------- | ----------- |
 | `entity_id`            |       no |Entity ID to projector. |
 
-#### Service `remote.send_command`
+#### Service `remote.send_command`:
 | Service data attribute | Optional | Description |
 | ---------------------- | -------- | ----------- |
 | `entity_id`            |       no |Entity ID to projector. |
-| `command`              |       no |A command to send. |
+| `command`              |       no |A command (or list of commands) to send. |
+| `delay_secs`              |       yes |The time in seconds to wait between each command in the list. |
 
-The available commands are:
-* **Lens Memory:** `memory-1`, `memory-2`, `memory-3`, `memory-4`,`memory-5`
-* **Source:** `input-hdmi1`, `input-hdmi2`
-* **Picture Mode:** `picture_mode-{cinema, natural, film, THX, hlg, hdr10}`, `picture_mode-user{1-6}`
-* **Low Latency Mode:** `low_latency-on`, `low_latency-off`
-* **Mask** `mask-off`, `mask-custom{1,2,3}`
+
+#### Command Strings:
+These command strings will perform an operation on the projector. The corresponding entry in the `last_commands_response` attribute will be `success` if the operation succeeded, or `failed` otherwise. Values in '{}' indicate multiple choices.
+* **Power:** `power-{on,off}` (recommended to use the `remote.turn_on` and `remote.turn_off` services).
+* **Lens Memory:** `memory-{1-5}`
+* **Source:** `input-{hdmi1, hdmi2}`
+* **Picture Mode:** `picture_mode-{cinema, natural, film, THX, hlg, hdr10}`, `picture_mode-{user1-user6}`
+* **Low Latency Mode:** `low_latency-{on, off}`
+* **Mask** `mask-{off, custom1, custom2, custom3}`
 * **Lamp** `lamp-{high,low}`
-* **Menu Controls** `menu-{menu,up,down,left,right,ok,back}`
-* **Lens Aperture** `aperture-off`, `aperture-auto{1,2}`
-* **Anamorphic** `anamorphic-off`, `anamorphic-{a,b,c}`
+* **Menu Controls** `menu-{menu, up, down, left, right, ok, back}`
+* **Lens Aperture** `aperture-{off, auto1, auto2}`
+* **Anamorphic** `anamorphic-{off, a, b, c}`
 
-Currently there is no feedback for these commands. For power on/off, use the `remote.turn_on` and `remote.turn_off` services, as these retrieve the power state.
+These command strings will store the response from the projector in the corresponding element of the  `last_commands_response` attribute or `failed` otherwise:
+* **Power status:** `power`, returns from `lamp_on`, `standby`, `cooling`, `reserved`, `emergency`
+* **Source:** `input`, returns from `hdmi1, hdmi2`
+* **Picture Mode:** `picture_mode`, returns from `cinema, natural, film, THX, hlg, hdr10, user{1-6}`
+* **Low Latency Mode:** `low_latency`, returns from `on, off`
+* **Mask** `mask`, returns from `off, custom1, custom2, custom3`
+* **Lamp** `lamp`, returns from `high, low`
+* **Lens Aperture** `aperture`, returns from `off, auto1, auto2`
+* **Anamorphic** `anamorphic`, returns from `off, a, b, c`
+* **MAC Address** `macaddr`, returns the projector's MAC address
+* **Model Info** `modelinfo`, returns the model string of the projector
 
 ### Support
 Check out the [Home Assistant Community Page](https://community.home-assistant.io/t/jvc-projector-component/123417) if you're having trouble getting this working.
