@@ -147,7 +147,7 @@ And use type `Integration`. Once installed, proceed to follow README in the 'jvc
 #### Command Strings:
 These command strings will perform an operation on the projector. The corresponding entry in the `last_commands_response` attribute will be `success` if the operation succeeded, or `failed` otherwise. Values in '{}' indicate multiple choices.
 * **Power:** `power-{on,off}` (recommended to use the `remote.turn_on` and `remote.turn_off` services).
-* **Lens Memory:** `memory-{1-5}`
+* **Lens Memory:** `memory-{1-10}`
 * **Source:** `input-{hdmi1, hdmi2}`
 * **Picture Mode:** `picture_mode-{cinema, natural, film, THX, hlg, hdr10}`, `picture_mode-{user1-user6}`
 * **Low Latency Mode:** `low_latency-{on, off}`
