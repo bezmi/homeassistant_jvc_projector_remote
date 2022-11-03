@@ -68,7 +68,7 @@ class JVCRemote(remote.RemoteEntity):
         self._input_state = "unknown" if not self._state else self._jvc.command("input")
         self._lamp_state = "unknown" if not self._state else self._jvc.command("lamp")
         self._picture_mode_state = (
-            "unknown" if not self._state else self._jvc.command("picture_mode")
+            "unknown" if (not self._state or self._signal_state in ('unknown', 'no_signal')) else self._jvc.command("picture_mode")
         )
         self._last_commands_response = None
         self.state_lock = asyncio.Lock()
@@ -194,9 +194,19 @@ class JVCRemote(remote.RemoteEntity):
             self._signal_state = await self.hass.async_add_executor_job(
                 self._jvc.command, ("signal")
             )
-            self._picture_mode_state = await self.hass.async_add_executor_job(
-                self._jvc.command, ("picture_mode")
-            )
+            
+            # on some models (tested on X5900 and X30). The 'picture_mode' command times out if
+            # there is no active signal going to the HDMI output.
+            if self._signal_state in ('no_signal' or 'unknown'):
+                self._picture_mode_state = 'unknown'
+                _LOGGER.info(
+                    f"Skip fetching picture_mode state as signal state is 'unknown' or 'no_signal'."
+                )
+            else:
+                self._picture_mode_state = await self.hass.async_add_executor_job(
+                    self._jvc.command, ("picture_mode")
+                )
+                
             self._lamp_state = await self.hass.async_add_executor_job(
                 self._jvc.command, ("lamp")
             )
