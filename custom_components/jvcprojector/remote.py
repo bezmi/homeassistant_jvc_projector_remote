@@ -5,6 +5,10 @@ from homeassistant import util
 import asyncio
 from typing import Final
 from jvc_projector_remote import JVCCommunicationError as comm_error
+from jvc_projector_remote import JVCConfigError as conf_error
+from jvc_projector_remote import JVCCannotConnectError as connect_error
+from jvc_projector_remote import JVCPoweredOffError as power_error
+from jvc_projector_remote import JVCProjector
 import datetime
 
 JVC_RETRIES: Final = "max_retries"
@@ -52,15 +56,28 @@ class JVCRemote(remote.RemoteEntity):
         retries: int | None,
     ) -> None:
         """Initialize the Remote."""
-        from jvc_projector_remote import JVCProjector
 
-        self._name = name or DEVICE_DEFAULT_NAME
-        self._host = host
-        self._password = password
+        self._conf_name = name or DEVICE_DEFAULT_NAME
+        self._conf_host = host
+        self._conf_password = password
+        self._conf_port = 20554 if port is None else port
+        self._conf_delay = delay
+        self._conf_timeout=timeout
+        self._conf_retries = retries
 
         self._last_commands_sent = None
-        self._jvc = JVCProjector(host, password, port, delay, timeout, retries)
-        self._power_state = self._jvc.power_state()
+
+        try:
+            self._jvc = JVCProjector(self._conf_host, self._conf_password, self._conf_port, self._conf_delay, self._conf_timeout, self._conf_retries)
+        except conf_error as e:
+            _LOGGER.warning(f"Couldn't set up the componenent due to the following error")
+            raise e
+
+        self._power_state = "not_connected" if not self._jvc.validate_connection() else self._jvc.power_state()
+
+        if self._power_state == "not_connected":
+            _LOGGER.warning(f"Initial connection test to the projector at {self._conf_host}:{self._conf_port} failed. Please check your configuration.")
+
         self._state = True if self._power_state == "lamp_on" else False
         self._signal_state = (
             "unknown" if not self._state else self._jvc.command("signal")
@@ -82,7 +99,7 @@ class JVCRemote(remote.RemoteEntity):
     @property
     def name(self) -> str:
         """Return the name of the device if any."""
-        return self._name
+        return self._conf_name
 
     async def async_update(self):
         await self.async_update_state()
@@ -129,6 +146,19 @@ class JVCRemote(remote.RemoteEntity):
         """Send a command to a device."""
 
         async with self.state_lock:
+
+            if self._power_state is "not_connected":
+                _LOGGER.warning(f"The projector is not connected, cannot send command")
+                (
+                    self._input_state,
+                    self._signal_state,
+                    self._picture_mode_state,
+                    self._lamp_state,
+                ) = ("unknown", "unknown", "unknown", "unknown")
+                self._last_commands_sent = []
+                self._last_commands_response = []
+                return
+
             if type(command) != list:
                 command = [command]
 
@@ -148,13 +178,25 @@ class JVCRemote(remote.RemoteEntity):
                 except comm_error as e:
                     # The projector is powered off
                     _LOGGER.warning(
-                        f"Failed to send command, could not communicate with projector: {repr(e)}\nThis could happen if the command only works when the projector is on but the current state is off, or the timeout setting is too low"
+                        f"Sent command, received communication error: {repr(e)}"
                     )
                     self._last_commands_sent.append(com)
                     self._last_commands_response.append("failed")
+                except power_error as e:
+                    _LOGGER.warning(f"Sent command, received power error: {repr(e)}")
+                    self._last_commands_sent.append(com)
+                    self._last_commands_response.append("failed")
+                except connect_error as e:
+                    # the projector is likely off at the mains
+                    _LOGGER.warning(f"The projector at {self._conf_host}:{self._conf_port} did not respond to the connection request: {repr(e)}")
+                    self._power_state = "not_connected"
+                    self._last_commands_sent = ["unknown"]
+                    self._last_commands_response = ["failed"]
+                    return
+
                 except Exception as e:
                     # when an error occured during sending, command execution probably failed
-                    _LOGGER.error(f"Unknown error, abort sending commands")
+                    _LOGGER.error(f"Unhandled error, abort sending commands")
                     self._last_commands_sent = ["unknown"]
                     self._last_commands_response = ["failed"]
                     raise e
@@ -174,6 +216,19 @@ class JVCRemote(remote.RemoteEntity):
         if self.state_lock.locked():
             return
 
+        # in case the init of the JVCProjector object failed due to a JVCConfigError
+        is_connected = await self.hass.async_add_executor_job(self._jvc.validate_connection)
+        if not is_connected:
+            _LOGGER.warning(f"Couldn't connect to the projector at the specified address: {self._conf_host}:{self._conf_port}. Ensure the configuration is correct.")
+            self._power_state = "not_connected"
+            (
+                self._input_state,
+                self._signal_state,
+                self._picture_mode_state,
+                self._lamp_state,
+            ) = ("unknown", "unknown", "unknown", "unknown")
+            return
+
         try:
             self._power_state = await self.hass.async_add_executor_job(
                 self._jvc.power_state
@@ -186,6 +241,8 @@ class JVCRemote(remote.RemoteEntity):
                     self._picture_mode_state,
                     self._lamp_state,
                 ) = ("unknown", "unknown", "unknown", "unknown")
+                self._last_commands_sent = ["power"]
+                self._last_commands_response = [self._power_state]
                 return
 
             self._input_state = await self.hass.async_add_executor_job(
@@ -211,6 +268,30 @@ class JVCRemote(remote.RemoteEntity):
                 self._jvc.command, ("lamp")
             )
 
+        except connect_error as e:
+            _LOGGER.warning(f"The projector at {self._conf_host}:{self._conf_port} did not respond to the connection request.")
+            self._power_state = "not_connected"
+            (
+                self._input_state,
+                self._signal_state,
+                self._picture_mode_state,
+                self._lamp_state,
+            ) = ("unknown", "unknown", "unknown", "unknown")
+            return
+        except comm_error as e:
+            _LOGGER.warning(
+                f"Failed to update state, received communication error : {repr(e)}."
+            )
+            self._power_state = "unknown"
+            (
+                self._input_state,
+                self._signal_state,
+                self._picture_mode_state,
+                self._lamp_state,
+            ) = ("unknown", "unknown", "unknown", "unknown")
+            return
+
         except Exception as e:
+            _LOGGER.error(f"Unhandled error occured")
             self._power_state = "unknown"
             raise e
