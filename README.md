@@ -157,28 +157,34 @@ And use type `Integration`. Once installed, proceed to follow README in the 'jvc
 
 #### Command Strings:
 These command strings will perform an operation on the projector. The corresponding entry in the `last_commands_response` attribute will be `success` if the operation succeeded, or `failed` otherwise. Values in '{}' indicate multiple choices.
-* **Power:** `power-{on,off}` (recommended to use the `remote.turn_on` and `remote.turn_off` services).
-* **Lens Memory:** `memory-{1-10}` (Not all projectors will have all 10)
-* **Source:** `input-{hdmi1, hdmi2}`
-* **Picture Mode:** `picture_mode-{cinema, natural, film, THX, hlg, hdr10}`, `picture_mode-{user1-user6}`, **NZ Series:** `frame_adapt_hdr`, `hdr10p`, `pana_pq`
-* **Low Latency Mode:** `low_latency-{on, off}`
-* **Mask** `mask-{off, custom1, custom2, custom3}`
-* **Lamp** `lamp-{high,low}`, **NZ Series:** `mid`
-* **Menu Controls** `menu-{menu, up, down, left, right, ok, back}`
-* **Lens Aperture** `aperture-{off, auto1, auto2}`
-* **Anamorphic** `anamorphic-{off, a, b, c}`
+| Type               | Commands                                      |     note           |
+| ------------------ |---------------------------------------------- |--------------------|
+| **Power:**         |   `power-{on,off}`                            |  (recommended to use the `remote.turn_on` and `remote.turn_off` services).                   |
+|  **Lens Memory:**  |   `memory-{1-10}`                             | (Not all projectors will have all 10)                   |
+|  **Source:**       |`input-{hdmi1, hdmi2}`                         |                    |
+|**Picture Mode:**   |                                               |                    |
+|**Low Latency Mode**|`low_latency-{on, off}`                        |                    |
+|   **Mask**         |`mask-{off, custom1, custom2, custom3}`        |                    |
+|     **Lamp**       |      `lamp-{high,low}`                        |`mid` for NZ series only           |            
+|  **Menu Controls** | `menu-{menu, up, down, left, right, ok, back}`|                    |
+| **Lens Aperture**  | `aperture-{off, auto1, auto2}`                |                    |
+| **Anamorphic**     |`anamorphic-{off, a, b, c}`                    |                    |
+
 
 These command strings will store the response from the projector in the corresponding element of the  `last_commands_response` attribute or `failed` otherwise:
-* **Power status:** `power`, returns from `lamp_on`, `standby`, `cooling`, `reserved`, `emergency`
-* **Source:** `input`, returns from `hdmi1, hdmi2`
-* **Picture Mode:** `picture_mode`, returns from `cinema, natural, film, THX, hlg, hdr10, user{1-6}`
-* **Low Latency Mode:** `low_latency`, returns from `on, off`
-* **Mask** `mask`, returns from `off, custom1, custom2, custom3`
-* **Lamp** `lamp`, returns from `high, low`
-* **Lens Aperture** `aperture`, returns from `off, auto1, auto2`
-* **Anamorphic** `anamorphic`, returns from `off, a, b, c`, **NZ Series:** `d`
-* **MAC Address** `macaddr`, returns the projector's MAC address
-* **Model Info** `modelinfo`, returns the model string of the projector
+| Type               | Commands                                      |     note           |
+| ------------------ |---------------------------------------------- |--------------------|
+| **Powerstatus**    |   `power`                                     |  returns from `lamp_on`, `standby`, `cooling`, `reserved`, `emergency`                 |                  |
+|  **Source:**       |`input`                                        |   returns from `hdmi1, hdmi2`                  |
+|**Picture Mode:**   |  `picture_mode`                               |returns from `cinema, natural, film, THX, hlg, hdr10, user{1-6}`                    |
+|**Low Latency Mode**|`low_latency`                                  |            returns from `on, off`        |
+|   **Mask**         |`mask`                                         | returns from `off, custom1, custom2, custom3`                                |
+|     **Lamp**       |      `lamp`                                   |` returns from `high, low`          |            
+| **Lens Aperture**  | `aperture`                                    |      returns from `off, auto1, auto2`               | 
+| **Anamorphic**     |`anamorphic`                                     |        returns from `off, a, b, c`, **NZ Series:** `d`             |
+| **MAC Address**         |   `macaddr`                                          |    returns the projector's MAC address                         |
+| **Model Info**         | `modelinfo                                     |        returns the model string of the projector                      |
+
 
 ### Support🤝
 Check out the [Home Assistant Community Page](https://community.home-assistant.io/t/jvc-projector-component/123417) if you're having trouble getting this working.
