@@ -187,36 +187,26 @@ These command strings will store the response from the projector in the correspo
 
 
 ### Support🤝
-Check out the [Home Assistant Community Page](https://community.home-assistant.io/t/jvc-projector-component/123417) if you're having trouble getting this working.
+Check out the [Home Assistant Community Page](https://community.home-assistant.io/t/jvc-projector-component/123417) and the [discussion board](https://github.com/bezmi/homeassistant_jvc_projector_remote/discussions) if you're having trouble getting this working.
 
-#### Home Assistant Component
+### Any issues? ☠
 If you'd like home assistant specific support, or would like me to
-implement/improve a feature for the homeassistant component, raise an issue and
-I'll get around to it.
+implement a feature for the homeassistant component, post on the [discussion board](https://github.com/bezmi/homeassistant_jvc_projector_remote/discussions).
 
-## Python Module Support
+For problems with getting this to work with homeassistant, post on the [discussion board](https://github.com/bezmi/homeassistant_jvc_projector_remote/discussions) first. That way we can [raise an issue](https://github.com/bezmi/homeassistant_jvc_projector_remote/issues/new/choose) once we've identified actual bugs, whilst keeping tech support questions out of the issue tracker.
 
-
-### See any issue ? ☠
-If you would like a new command to be implemented, or have issues with related code, please raise
-an issue in the [jvc-projector-remote](https://github.com/bezmi/jvc_projector) repo.
+If you would like a new command to be implemented, please raise
+an issue in the [jvc-projector-remote](https://github.com/bezmi/jvc_projector) repo, or don't, and just report it here. I'm sure we'll figure it out.
 <br><br>
 
-### For folks who wants to contribute ❤
-Read the contributing guidelines before getting started.
-- Clone the repo in your own local machine
-`git clone <url.git>`
-- Install the dependencies
-`npm install`
+### For folks who want to contribute ❤
+[Check out the open issues](https://github.com/bezmi/homeassistant_jvc_projector_remote/issues)
 
-
- Clone the repo in your own local machine
-Comment on the issue and we will reserve it for you. &nbsp;🌈 &nbsp; ✨
-
+Fork this repo and create a pull request &nbsp;🌈 &nbsp; ✨
 
 Your contribution is highly appreciated 🙏.</br>
 <div align="center">
 <h4 font-weight="bold">This repository is maintained by <a href="https://github.com/bezmi">bezmi</a></h4>
-<p> Show some ❤️ by starring this awesome repository! </p>
+<p> Show some ❤️ by giving us a star! </p>
 </div>
 
