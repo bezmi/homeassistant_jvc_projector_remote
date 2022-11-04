@@ -1,6 +1,8 @@
+<h1 align=center>About Us</h1>
 This project is looking for (co-)maintainers. Times change, I might end up with a different projector brand, JVC might change the command interface for a newer model that I don't have. Enough people use this component now that I think it's important to think about think about its future. I would be grateful to have people who are competent in python and have access to a JVC projector on board. If you're willing to help, submit a pull request implementing new features, fixing bugs or tidying up my terrible programming and documentation!
+<br><br>
 
-If you'd like to support on-going work for this homeassistant component, you can [donate on ko-fi](https://ko-fi.com/bezmi). 
+> If you'd like to support on-going work for this homeassistant component, you can [donate on ko-fi](https://ko-fi.com/bezmi). 
 
 # JVC Projector Remote for Homeassistant
 this repo contains a remote implementation for jvc projectors.
@@ -22,6 +24,13 @@ for a while and it should work with most JVC D-ILA projectors.
 
 **NOTE For JVC NZ series**
 JVC has implemented a "Network Password" with their latest projectors (NZ Series). You will need to define a Network Password on the projector and provide it in the configuration of this integration in order for it to communicate.
+
+### Technologies used 🛠
+
+<p align="left"> 
+
+ <img src="https://img.shields.io/badge/python-323330?style=for-the-badge&logo=python&logoColor=F7DF1E">
+
 
 ## Basic Setup and Example Usage
 Add this under `remote` in your `configuration.yaml` (NOTE: no web interface set up at the moment, there's an open issue for it):
@@ -81,8 +90,8 @@ Add an **Entities** card to your dashboard to control it. Make sure the inputs s
 
 **IMPORTANT NOTE:** In your projector settings, you must make sure that the Control4 setting is turned OFF under Network options. While this is on, the projector will not expose port 20554, which means this integration won’t work.
 
-## Installation
-### HACS (Recommended)
+## Installation⏳
+### HACS (Recommended)📕
 For easy installation and updates, use [HACS](https://hacs.xyz/) to install this custom component. The installation instructions for HASS are available [here](https://hacs.xyz/docs/setup/prerequisites). 
 
 After you've enabled HACS
@@ -171,7 +180,7 @@ These command strings will store the response from the projector in the correspo
 * **MAC Address** `macaddr`, returns the projector's MAC address
 * **Model Info** `modelinfo`, returns the model string of the projector
 
-### Support
+### Support🤝
 Check out the [Home Assistant Community Page](https://community.home-assistant.io/t/jvc-projector-component/123417) if you're having trouble getting this working.
 
 #### Home Assistant Component
@@ -179,6 +188,29 @@ If you'd like home assistant specific support, or would like me to
 implement/improve a feature for the homeassistant component, raise an issue and
 I'll get around to it.
 
-#### Python Module Support
+## Python Module Support
+
+
+### See any issue ? ☠
 If you would like a new command to be implemented, or have issues with related code, please raise
 an issue in the [jvc-projector-remote](https://github.com/bezmi/jvc_projector) repo.
+<br><br>
+
+### For folks who wants to contribute ❤
+Read the contributing guidelines before getting started.
+- Clone the repo in your own local machine
+`git clone <url.git>`
+- Install the dependencies
+`npm install`
+
+
+ Clone the repo in your own local machine
+Comment on the issue and we will reserve it for you. &nbsp;🌈 &nbsp; ✨
+
+
+Your contribution is highly appreciated 🙏.</br>
+<div align="center">
+<h4 font-weight="bold">This repository is maintained by <a href="https://github.com/bezmi">bezmi</a></h4>
+<p> Show some ❤️ by starring this awesome repository! </p>
+</div>
+
