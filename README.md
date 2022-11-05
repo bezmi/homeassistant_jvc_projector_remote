@@ -4,15 +4,17 @@ This project is looking for (co-)maintainers. Times change, I might end up with 
 
 > If you'd like to support on-going work for this homeassistant component, you can [donate on ko-fi](https://ko-fi.com/bezmi) or [github sponsors](https://github.com/sponsors/bezmi).
 
-# JVC projector remote for Homeassistant
-this repo contains a remote implementation for jvc projectors.
+<p align="left"> 
 
-Check out the [Home Assistant Community Page](https://community.home-assistant.io/t/jvc-projector-component/123417) if you're having trouble getting this working.
+ <img src="https://img.shields.io/badge/python-323330?style=for-the-badge&logo=python&logoColor=F7DF1E">
+ 
+# JVC projector remote for Homeassistant
+this repo contains a remote implementation for jvc projectors. **For the most up-to-date documentation, [visit the main repository page](https://github.com/bezmi/homeassistant_jvc_projector_remote)**.
+
+We also have a [home assistant community page](https://community.home-assistant.io/t/jvc-projector-component/123417).
 
 The `jvcprojector` remote platform allows you to control the state of a JVC
 Projector. 
-
-DISCLAIMER: I rarely have time to work on these things, so if anything is broken, let me know and I'll push out a patch as quickly as possible. Alternatively, create a pull request!
 
 Known supported units:
 * DLA-X5900
@@ -22,15 +24,6 @@ Known supported units:
 
 The IP command format hasn't changed
 for a while and it should work with most JVC D-ILA projectors.
-
-**NOTE for JVC NZ series**
-JVC has implemented a "Network Password" with their latest projectors (NZ Series). You will need to define a Network Password on the projector and provide it in the configuration of this integration in order for it to communicate.
-
-### Technologies used 🛠
-
-<p align="left"> 
-
- <img src="https://img.shields.io/badge/python-323330?style=for-the-badge&logo=python&logoColor=F7DF1E">
 
 # Getting started
 ## Installation⏳
