@@ -44,6 +44,7 @@ def setup_platform(hass, config, add_entities, discovery_info=None) -> None:
 
 class JVCRemote(remote.RemoteEntity):
     """Home assistant JVC remote representation"""
+    
 
     def __init__(
         self,
@@ -76,16 +77,17 @@ class JVCRemote(remote.RemoteEntity):
         self._power_state = "not_connected" if not self._jvc.validate_connection() else self._jvc.power_state()
 
         if self._power_state == "not_connected":
+            self._attr_available = False
             _LOGGER.warning(f"Initial connection test to the projector at {self._conf_host}:{self._conf_port} failed. Please check your configuration.")
 
-        self._state = True if self._power_state == "lamp_on" else False
+        self._attr_is_on = True if self._power_state == "lamp_on" else False
         self._signal_state = (
-            "unknown" if not self._state else self._jvc.command("signal")
+            "unknown" if not self.is_on else self._jvc.command("signal")
         )
-        self._input_state = "unknown" if not self._state else self._jvc.command("input")
-        self._lamp_state = "unknown" if not self._state else self._jvc.command("lamp")
+        self._input_state = "unknown" if not self.is_on else self._jvc.command("input")
+        self._lamp_state = "unknown" if not self.is_on else self._jvc.command("lamp")
         self._picture_mode_state = (
-            "unknown" if (not self._state or self._signal_state in ('unknown', 'no_signal')) else self._jvc.command("picture_mode")
+            "unknown" if (not self.is_on or self._signal_state in ('unknown', 'no_signal')) else self._jvc.command("picture_mode")
         )
         self._last_commands_response = None
         self.state_lock = asyncio.Lock()
@@ -105,18 +107,8 @@ class JVCRemote(remote.RemoteEntity):
         await self.async_update_state()
 
     @property
-    def is_on(self) -> bool:
-        """Return true if remote is on."""
-        return self._state
-
-    @property
     def extra_state_attributes(self) -> dict:
         """Return device state attributes."""
-
-        if self._power_state in ["lamp_on", "reserved"]:
-            self._state = True
-        else:
-            self._state = False
 
         return {
             "last_commands_sent": self._last_commands_sent,
@@ -130,17 +122,19 @@ class JVCRemote(remote.RemoteEntity):
 
     async def async_turn_on(self, **kwargs) -> None:
         """Turn the remote on."""
-        if self._state:
+        if self.is_on:
             return
+        self._attr_is_on = True
+        self.async_write_ha_state()
         await self.async_send_command("power-on")
-        self._state = True
 
     async def async_turn_off(self, **kwargs) -> None:
         """Turn the remote off."""
-        if not self._state:
+        if not self.is_on:
             return
+        self._attr_is_on = False
+        self.async_write_ha_state()
         await self.async_send_command("power-off")
-        self._state = False
 
     async def async_send_command(self, command, delay_secs=0, **kwargs) -> None:
         """Send a command to a device."""
@@ -153,7 +147,7 @@ class JVCRemote(remote.RemoteEntity):
                     self._input_state,
                     self._signal_state,
                     self._picture_mode_state,
-                    self._lamp_state,
+                    self._attr_lamp_state,
                 ) = ("unknown", "unknown", "unknown", "unknown")
                 self._last_commands_sent = []
                 self._last_commands_response = []
@@ -221,11 +215,13 @@ class JVCRemote(remote.RemoteEntity):
         if not is_connected:
             _LOGGER.warning(f"Couldn't connect to the projector at the specified address: {self._conf_host}:{self._conf_port}. Ensure the configuration is correct.")
             self._power_state = "not_connected"
+            self._attr_available = False
+            self._attr_is_on = False
             (
                 self._input_state,
                 self._signal_state,
                 self._picture_mode_state,
-                self._lamp_state,
+                self._attr_lamp_state,
             ) = ("unknown", "unknown", "unknown", "unknown")
             return
 
@@ -233,13 +229,17 @@ class JVCRemote(remote.RemoteEntity):
             self._power_state = await self.hass.async_add_executor_job(
                 self._jvc.power_state
             )
+            if self._power_state in ["lamp_on", "reserved"]:
+                self._attr_is_on = True
+            else:
+                self._attr_is_on = False
 
             if self._power_state != "lamp_on":
                 (
                     self._input_state,
                     self._signal_state,
                     self._picture_mode_state,
-                    self._lamp_state,
+                    self._attr_lamp_state,
                 ) = ("unknown", "unknown", "unknown", "unknown")
                 self._last_commands_sent = ["power"]
                 self._last_commands_response = [self._power_state]
@@ -264,7 +264,7 @@ class JVCRemote(remote.RemoteEntity):
                     self._jvc.command, ("picture_mode")
                 )
                 
-            self._lamp_state = await self.hass.async_add_executor_job(
+            self._attr_lamp_state = await self.hass.async_add_executor_job(
                 self._jvc.command, ("lamp")
             )
 
@@ -275,7 +275,7 @@ class JVCRemote(remote.RemoteEntity):
                 self._input_state,
                 self._signal_state,
                 self._picture_mode_state,
-                self._lamp_state,
+                self._attr_lamp_state,
             ) = ("unknown", "unknown", "unknown", "unknown")
             return
         except comm_error as e:
@@ -287,7 +287,7 @@ class JVCRemote(remote.RemoteEntity):
                 self._input_state,
                 self._signal_state,
                 self._picture_mode_state,
-                self._lamp_state,
+                self._attr_lamp_state,
             ) = ("unknown", "unknown", "unknown", "unknown")
             return
 
@@ -295,3 +295,4 @@ class JVCRemote(remote.RemoteEntity):
             _LOGGER.error(f"Unhandled error occured")
             self._power_state = "unknown"
             raise e
+
