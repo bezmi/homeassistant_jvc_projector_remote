@@ -77,7 +77,6 @@ class JVCRemote(remote.RemoteEntity):
         self._power_state = "not_connected" if not self._jvc.validate_connection() else self._jvc.power_state()
 
         if self._power_state == "not_connected":
-            self._attr_available = False
             _LOGGER.warning(f"Initial connection test to the projector at {self._conf_host}:{self._conf_port} failed. Please check your configuration.")
 
         self._attr_is_on = True if self._power_state == "lamp_on" else False
@@ -215,7 +214,6 @@ class JVCRemote(remote.RemoteEntity):
         if not is_connected:
             _LOGGER.warning(f"Couldn't connect to the projector at the specified address: {self._conf_host}:{self._conf_port}. Ensure the configuration is correct.")
             self._power_state = "not_connected"
-            self._attr_available = False
             self._attr_is_on = False
             (
                 self._input_state,
