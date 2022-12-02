@@ -9,5 +9,5 @@
   ],
   "version": "2.1.0",
   "integration_type": "device",
-  "config_flow": true,
+  "config_flow": true
 }
