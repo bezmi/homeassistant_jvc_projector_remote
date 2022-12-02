@@ -1,11 +1,13 @@
 {
   "domain": "jvcprojector",
+  "config_flow": true,
   "name": "JVC Projector IP Control",
   "documentation": "https://github.com/bezmi/hass_custom_components",
-  "requirements": ["jvc-projector-remote == 0.2.1"],
+  "requirements": ["jvc-projector-remote == 0.2.2.post1"],
   "dependencies": [],
   "codeowners": [
     "@bezmi"
   ],
-  "version": "2.0.0a3"
+  "version": "2.0.1",
+  "integration_type": "device"
 }

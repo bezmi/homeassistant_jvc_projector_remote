@@ -1,0 +1,25 @@
+{
+    "config": {
+        "abort": {
+            "already_configured": "Device is already configured"
+        },
+        "error": {
+            "cannot_connect": "Failed to connect",
+            "invalid_host": "Invalid hostname or IP address",
+            "unknown": "Unexpected error"
+        },
+        "step": {
+            "user": {
+                "data": {
+                    "delay": "Delay ms",
+                    "host": "Host",
+                    "max_retries": "Max Retries (5)",
+                    "password": "Password",
+                    "port": "Port",
+                    "scan_interval": "Scan Interval seconds",
+                    "timeout": "Timeout seconds"
+                }
+            }
+        }
+    }
+}
