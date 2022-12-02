@@ -1,31 +1,13 @@
 import logging
 from homeassistant.components.remote import RemoteEntity
-from homeassistant.const import DEVICE_DEFAULT_NAME
-from homeassistant import util
-import asyncio
-from typing import Final
-from jvc_projector_remote import JVCCommunicationError as comm_error
-from jvc_projector_remote import JVCConfigError as conf_error
-from jvc_projector_remote import JVCCannotConnectError as connect_error
-from jvc_projector_remote import JVCPoweredOffError as power_error
-from jvc_projector_remote import JVCProjector
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.entity import DeviceInfo
-import datetime
-from .const import DOMAIN
-from .const import DEFAULT_NAME
+from .const import DOMAIN, DEFAULT_NAME
 from .entity import JVCProjectorEntity
 from .coordinator import JVCProjectorCoordinator
 
 from homeassistant.const import (
-    CONF_HOST,
-    CONF_PORT,
-    CONF_NAME,
-    CONF_PASSWORD,
-    CONF_TIMEOUT,
-    CONF_DELAY,
     CONF_MAC,
     CONF_MODEL,
 )
@@ -40,7 +22,7 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry, asyn
     assert unique_id is not None
     async_add_entities(
         [
-            JVCProjectorRemote(coordinator, unique_id, config_entry.data[CONF_MODEL])
+            JVCProjectorRemote(coordinator, unique_id, config_entry.data[CONF_MODEL], DEFAULT_NAME)
         ],
         True,
     )
@@ -66,11 +48,7 @@ class JVCProjectorRemote(JVCProjectorEntity, RemoteEntity):
     def is_on(self) -> bool:
         return self.coordinator.is_on
 
-    # @property
-    # def available(self) -> bool:
-    #     return self.coordinator.available
-
-    async def async_turn_on(self, **kwargs) -> None:
+    async def async_turn_on(self) -> None:
         """Turn the remote on."""
         if self.is_on:
             return
@@ -80,7 +58,7 @@ class JVCProjectorRemote(JVCProjectorEntity, RemoteEntity):
         self.async_write_ha_state()
         # await self.coordinator.async_request_refresh()
 
-    async def async_turn_off(self, **kwargs) -> None:
+    async def async_turn_off(self) -> None:
         """Turn the remote off."""
         if not self.is_on:
             return
@@ -88,9 +66,7 @@ class JVCProjectorRemote(JVCProjectorEntity, RemoteEntity):
         self.coordinator.is_on = False
         await self.coordinator.async_turn_off()
         self.async_write_ha_state()
-        # await self.coordinator.async_request_refresh()
 
     async def async_send_command(self, command, delay_secs=0, **kwargs) -> None:
         """Send a command to a device."""
         await self.coordinator.async_send_command(command, delay_secs)
-        # await self.coordinator.async_request_refresh()

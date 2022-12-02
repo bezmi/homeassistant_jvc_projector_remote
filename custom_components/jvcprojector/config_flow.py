@@ -6,21 +6,15 @@ from typing import Any
 
 import voluptuous as vol
 
-from homeassistant.const import CONF_HOST, CONF_PORT, CONF_TIMEOUT, CONF_PASSWORD, CONF_DELAY, CONF_MAC, CONF_MODEL, CONF_SCAN_INTERVAL, Platform
-#from homeassistant.config_entries import ConfigEntry
-#from homeassistant.data_entry_flow import FlowResult
-#from homeassistant.helpers import instance_id
-#import homeassistant.helpers.config_validation as cv
-#from homeassistant.util.network import is_host_valid
-#from homeassistant.core import callback
+from homeassistant.const import CONF_HOST, CONF_PORT, CONF_TIMEOUT, CONF_DELAY, CONF_MAC, CONF_MODEL, CONF_SCAN_INTERVAL
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.device_registry import format_mac
 from homeassistant import config_entries, exceptions
 from homeassistant.util.network import is_host_valid
 
-from .const import DOMAIN, CONF_MAX_RETRIES, DEFAULT_PORT, DEFAULT_DELAY_MS, DEFAULT_CONNECT_TIMEOUT, DEFAULT_MAX_RETRIES
+from .const import DOMAIN, CONF_MAX_RETRIES, CONF_NETWORK_PASSWORD
 
-from jvc_projector_remote import JVCProjector, Commands
+from jvc_projector_remote import JVCProjector
 
 #from . import  JVCProjectorCoordinator
 
@@ -29,7 +23,7 @@ _LOGGER = logging.getLogger(__name__)
 DATA_SCHEMA = vol.Schema({
     vol.Required(CONF_HOST): str,
     vol.Optional(CONF_PORT, default=20554): int,
-    vol.Optional(CONF_PASSWORD, default=""): str,
+    vol.Optional(CONF_NETWORK_PASSWORD, default=""): str,
     vol.Optional(CONF_DELAY, default=600): int,
     vol.Optional(CONF_TIMEOUT, default=0.5): float,
     vol.Optional(CONF_MAX_RETRIES, default=5): int,
@@ -39,7 +33,7 @@ DATA_SCHEMA = vol.Schema({
 async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> dict[str, Any]:
     """Validate the user input allows us to connect."""
 
-    projector = JVCProjector(data[CONF_HOST], data[CONF_PASSWORD], data[CONF_PORT], data[CONF_DELAY], data[CONF_TIMEOUT], data[CONF_MAX_RETRIES])
+    projector = JVCProjector(data[CONF_HOST], data[CONF_NETWORK_PASSWORD], data[CONF_PORT], data[CONF_DELAY], data[CONF_TIMEOUT], data[CONF_MAX_RETRIES])
 
     connection_valid = projector.validate_connection()
     if not connection_valid:
@@ -62,9 +56,9 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         if user_input is not None:
             try:
                 try:
-                    password = user_input[CONF_PASSWORD]
+                    password = user_input[CONF_NETWORK_PASSWORD]
                 except KeyError:
-                    user_input[CONF_PASSWORD] = None
+                    user_input[CONF_NETWORK_PASSWORD] = None
 
                 if not is_host_valid(user_input[CONF_HOST]): raise InvalidHost
                 info = await validate_input(self.hass, user_input)

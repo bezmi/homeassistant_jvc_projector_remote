@@ -16,6 +16,7 @@ class JVCProjectorEntity(CoordinatorEntity[JVCProjectorCoordinator]):
             coordinator: JVCProjectorCoordinator,
             unique_id: str,
             model: str,
+            name: str,
     ) -> None:
         """Initialize the entity."""
         super().__init__(coordinator)
@@ -25,5 +26,5 @@ class JVCProjectorEntity(CoordinatorEntity[JVCProjectorCoordinator]):
             identifiers={(DOMAIN, unique_id)},
             manufacturer=ATTR_MANUFACTURER,
             model=model,
-            name=f"{ATTR_MANUFACTURER} {model}",
+            name=name,
         )

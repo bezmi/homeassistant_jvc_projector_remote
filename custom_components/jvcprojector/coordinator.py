@@ -5,32 +5,23 @@ from __future__ import annotations
 
 import logging
 
-from homeassistant.components import remote
-from homeassistant.const import DEVICE_DEFAULT_NAME
-from homeassistant import util
 import asyncio
 from types import MappingProxyType
-from typing import Any, Final
+from typing import Any
 from jvc_projector_remote import JVCCommunicationError as comm_error
-from jvc_projector_remote import JVCConfigError as conf_error
 from jvc_projector_remote import JVCCannotConnectError as connect_error
 from jvc_projector_remote import JVCPoweredOffError as power_error
 from jvc_projector_remote import JVCProjector
-from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.entity import DeviceInfo
 from homeassistant.helpers.debounce import Debouncer
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
+from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 import datetime
 from .const import DOMAIN
-from .const import DEFAULT_NAME, CONF_MAX_RETRIES
+from .const import CONF_MAX_RETRIES
 
 from homeassistant.const import (
     CONF_HOST,
     CONF_PORT,
-    CONF_NAME,
-    CONF_PASSWORD,
     CONF_SCAN_INTERVAL,
     CONF_TIMEOUT,
     CONF_DELAY,
@@ -156,28 +147,12 @@ class JVCProjectorCoordinator(DataUpdateCoordinator[None]):
 
     async def _async_update_data(self) -> None:
         """ "Update the state with the Power Status (if available)"""
-        _LOGGER.warning("updating data")
+        _LOGGER.debug("updating state")
 
         # do nothing until lock is released
         if self.state_lock.locked():
             return
 
-        # in case the init of the JVCProjector object failed due to a JVCConfigError
-        # is_connected = await self.hass.async_add_executor_job(self.client.validate_connection)
-        # if not is_connected:
-        #     _LOGGER.warning(f"Couldn't connect to the projector at the specified address: {self.conf_host}:{self.conf_port}. Ensure the configuration is correct.")
-        #     self.power_state = "not_connected"
-        #     # self.available = False
-        #     self.is_on = False
-        #     (
-        #         self.input_state,
-        #         self.signal_state,
-        #         self.picture_mode_state,
-        #         self.lamp_state,
-        #     ) = ("unknown", "unknown", "unknown", "unknown")
-        #     return
-
-        # self.available = True
         try:
             self.power_state = await self.hass.async_add_executor_job(
                 self.client.power_state
@@ -207,7 +182,7 @@ class JVCProjectorCoordinator(DataUpdateCoordinator[None]):
             # there is no active signal going to the HDMI output.
             if self.signal_state in ('no_signal' or 'unknown'):
                 self.picture_mode_state = 'unknown'
-                _LOGGER.info(
+                _LOGGER.debug(
                     f"Skip fetching picture_mode state as signal state is 'unknown' or 'no_signal'."
                 )
             else:

@@ -14,7 +14,7 @@
                     "delay": "Delay ms",
                     "host": "Host",
                     "max_retries": "Max Retries (5)",
-                    "password": "Password",
+                    "network_password": "Network password (leave blank if unsure)",
                     "port": "Port",
                     "scan_interval": "Scan Interval seconds",
                     "timeout": "Timeout seconds"

@@ -4,11 +4,11 @@ from __future__ import annotations
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 
-from homeassistant.const import CONF_HOST, CONF_PORT, CONF_TIMEOUT, CONF_PASSWORD, CONF_DELAY, Platform
+from homeassistant.const import CONF_HOST, CONF_PORT, CONF_TIMEOUT, CONF_DELAY, Platform
 
 from jvc_projector_remote import JVCProjector
 
-from .const import DOMAIN, CONF_MAX_RETRIES
+from .const import DOMAIN, CONF_MAX_RETRIES, CONF_NETWORK_PASSWORD
 from .coordinator import JVCProjectorCoordinator
 
 from typing import Final
@@ -21,7 +21,7 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> b
     """Set up JVC Projector from config entry"""
     host = config_entry.data[CONF_HOST]
     port = config_entry.data[CONF_PORT]
-    password = config_entry.data[CONF_PASSWORD]
+    password = config_entry.data[CONF_NETWORK_PASSWORD]
     delay = config_entry.data[CONF_DELAY]
     timeout = config_entry.data[CONF_TIMEOUT]
     max_retries = config_entry.data[CONF_MAX_RETRIES]
