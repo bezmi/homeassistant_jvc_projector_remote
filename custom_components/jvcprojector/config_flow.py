@@ -12,7 +12,7 @@ from homeassistant.helpers.device_registry import format_mac
 from homeassistant import config_entries, exceptions
 from homeassistant.util.network import is_host_valid
 
-from .const import DOMAIN, CONF_MAX_RETRIES, CONF_NETWORK_PASSWORD
+from .const import DOMAIN, CONF_MAX_RETRIES, CONF_NETWORK_PASSWORD, DEFAULT_NAME, DEFAULT_DELAY_MS, DEFAULT_PORT, DEFAULT_CONNECT_TIMEOUT, DEFAULT_MAX_RETRIES, DEFAULT_SCAN_INTERVAL
 
 from jvc_projector_remote import JVCProjector
 
@@ -22,12 +22,12 @@ _LOGGER = logging.getLogger(__name__)
 
 DATA_SCHEMA = vol.Schema({
     vol.Required(CONF_HOST): str,
-    vol.Optional(CONF_PORT, default=20554): int,
-    vol.Optional(CONF_NETWORK_PASSWORD, default=""): str,
-    vol.Optional(CONF_DELAY, default=600): int,
-    vol.Optional(CONF_TIMEOUT, default=0.5): float,
-    vol.Optional(CONF_MAX_RETRIES, default=5): int,
-    vol.Optional(CONF_SCAN_INTERVAL, default=5): int,
+    vol.Optional(CONF_PORT, default=DEFAULT_PORT): int,
+    vol.Optional(CONF_NETWORK_PASSWORD): str,
+    vol.Optional(CONF_DELAY, default=DEFAULT_DELAY_MS): int,
+    vol.Optional(CONF_TIMEOUT, default=DEFAULT_CONNECT_TIMEOUT): float,
+    vol.Optional(CONF_MAX_RETRIES, default=DEFAULT_MAX_RETRIES): int,
+    vol.Optional(CONF_SCAN_INTERVAL, default=DEFAULT_SCAN_INTERVAL): int,
 })
 
 async def validate_input(hass: HomeAssistant, data: dict[str, Any]) -> dict[str, Any]:
@@ -66,7 +66,7 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                 user_input[CONF_MODEL]=info[CONF_MODEL]
                 await self.async_set_unique_id(info[CONF_MAC])
                 self._abort_if_unique_id_configured()
-                return self.async_create_entry(title=info[CONF_MODEL], data=user_input)
+                return self.async_create_entry(title=f"{DEFAULT_NAME} {info[CONF_MODEL]}", data=user_input)
             except CannotConnect:
                 errors["base"] = "cannot_connect"
             except InvalidHost:
